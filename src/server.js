@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import pino from 'pino-http';
+import { getContacts, getContactById } from './controllers/contacts.js';
 
 function setupServer() {
   const app = express();
@@ -8,6 +9,10 @@ function setupServer() {
   // Middleware setup
   app.use(cors());
   app.use(pino());
+
+  // Routes
+  app.get('/contacts', getContacts);
+  app.get('/contacts/:contactId', getContactById);
 
   // Handle non-existing routes
   app.use((req, res) => {
