@@ -1,4 +1,4 @@
-import Contact from '../db/models/contacts.js'; // Updated path to the Contact model
+import Contact from '../db/models/contacts.js';
 
 export async function getContactsService() {
   try {

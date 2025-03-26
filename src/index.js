@@ -7,7 +7,7 @@ dotenv.config({ path: '.env.example' });
 async function startApplication() {
   try {
     await initMongoConnection();
-    setupServer(); // Ensure the server starts
+    setupServer(); 
   } catch (error) {
     console.error('Failed to start the application:', error.message);
     process.exit(1);
