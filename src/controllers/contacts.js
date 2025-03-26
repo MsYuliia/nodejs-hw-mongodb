@@ -36,7 +36,7 @@ export async function getContactById(req, res) {
       message: `Successfully found contact with id ${contactId}!`,
       data: contact,
     });
-  } catch (error) {
+  } catch {
     return res.status(404).json({
       message: 'Contact not found',
     });
