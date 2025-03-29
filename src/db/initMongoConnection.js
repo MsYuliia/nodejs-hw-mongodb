@@ -1,13 +1,15 @@
 import mongoose from 'mongoose';
 
 async function initMongoConnection() {
-  const { MONGO_URI } = process.env;
+  const { MONGODB_DB, MONGODB_PASSWORD, MONGODB_USER,MONGODB_URL } = process.env;
 
-  if (!MONGO_URI) {
+  if (!MONGODB_USER||!MONGODB_PASSWORD||!MONGODB_URL||!MONGODB_DB) {
     throw new Error(
       'MongoDB connection environment variables are not fully defined',
     );
   }
+
+ const MONGO_URI =`mongodb+srv://${MONGODB_USER}:${MONGODB_PASSWORD}@${MONGODB_URL}/?retryWrites=true&w=majority&appName=${MONGODB_DB}`
 
   try {
     await mongoose.connect(MONGO_URI, {
