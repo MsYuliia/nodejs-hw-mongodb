@@ -2,7 +2,8 @@ import { setupServer } from './server.js';
 import { initMongoConnection } from './db/initMongoConnection.js';
 
 import dotenv from 'dotenv';
-dotenv.config({ path: '.env.example' });
+dotenv.config({ path: '.env' });
+
 
 async function startApplication() {
   try {

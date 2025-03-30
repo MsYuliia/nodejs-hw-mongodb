@@ -17,3 +17,28 @@ export async function getContactByIdService(contactId) {
     throw new Error('Error fetching contact by ID: ' + error.message);
   }
 }
+
+export async function createContactService(contactData) {
+  try {
+    const newContact = new Contact(contactData);
+    return await newContact.save();
+  } catch (error) {
+    throw new Error('Error creating contact: ' + error.message);
+  }
+}
+
+export const updateContactService = async (contactId, updateData) => {
+  const updatedContact = await Contact.findByIdAndUpdate(
+    contactId,
+    { $set: updateData },
+    { new: true, runValidators: true },
+  );
+
+  return updatedContact;
+};
+
+export const deleteContactService = async (contactId) => {
+  const deletedContact = await Contact.findByIdAndDelete(contactId);
+  
+  return deletedContact;
+};
