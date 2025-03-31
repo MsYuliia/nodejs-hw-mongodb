@@ -15,7 +15,10 @@ const contactSchema = new Schema(
       default: 'personal',
     },
   },
-  { timestamps: true },
+  { 
+    timestamps: true,
+    versionKey: false, // Disable the __v field
+  },
 );
 
 const Contact = model('Contact', contactSchema);
