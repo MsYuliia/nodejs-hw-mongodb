@@ -5,7 +5,8 @@ export async function getContactsService() {
     const contacts = await Contact.find({});
     return contacts;
   } catch (error) {
-    throw new Error('Error fetching contacts: ' + error.message);
+    console.error(error);
+    return null;
   }
 }
 
@@ -14,7 +15,8 @@ export async function getContactByIdService(contactId) {
     const contact = await Contact.findById(contactId);
     return contact;
   } catch (error) {
-    throw new Error('Error fetching contact by ID: ' + error.message);
+    console.error(error);
+    return null;
   }
 }
 
@@ -23,7 +25,8 @@ export async function createContactService(contactData) {
     const newContact = new Contact(contactData);
     return await newContact.save();
   } catch (error) {
-    throw new Error('Error creating contact: ' + error.message);
+    console.error(error);
+    return null;
   }
 }
 
@@ -39,6 +42,6 @@ export const updateContactService = async (contactId, updateData) => {
 
 export const deleteContactService = async (contactId) => {
   const deletedContact = await Contact.findByIdAndDelete(contactId);
-  
+
   return deletedContact;
 };

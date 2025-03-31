@@ -1,6 +1,6 @@
 import { HttpError } from 'http-errors';
 
-export default (err, _, res) => {
+export default (err, req, res, next) => {
   if (err instanceof HttpError) {
     res.status(err.status).json({
       status: err.status,
