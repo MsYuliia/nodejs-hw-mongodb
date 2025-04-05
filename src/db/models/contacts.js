@@ -15,7 +15,7 @@ const contactSchema = new Schema(
       default: 'personal',
     },
   },
-  { 
+  {
     timestamps: true,
     versionKey: false, // Disable the __v field
   },
