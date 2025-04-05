@@ -7,11 +7,16 @@ import {
   deleteContactService,
 } from '../services/contacts.js';
 import { parsePaginationParams } from '../utils/paginationHelpers.js';
+import { parseSortParams } from '../utils/sortingHelper.js';
 
 async function getContacts(req, res) {
   const paginationParams = parsePaginationParams(req.query);
+  const sortParams = parseSortParams(req.query);
 
-  const data = await getContactsService(paginationParams);
+  const data = await getContactsService({
+    ...paginationParams,
+    ...sortParams,
+  });
 
   if (!data) {
     throw createError(404, 'Contacts not found');
