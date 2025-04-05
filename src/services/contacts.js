@@ -1,20 +1,22 @@
 import Contact from '../db/models/contacts.js';
 import { calculatePaginationData } from '../utils/paginationHelpers.js';
 
-export async function getContactsService({ page, perPage, sortBy, sortOrder }) {
+export async function getContactsService({
+  page,
+  perPage,
+  sortBy,
+  sortOrder,
+  filterParams,
+}) {
   try {
     const limit = perPage;
     const skip = (page - 1) * perPage;
     const sortOption = { [sortBy]: sortOrder === 'desc' ? -1 : 1 };
 
-    const contactsQuery = Contact.find();
-    const contactsCount = await Contact.find().countDocuments();
+    const contactsQuery = Contact.find(filterParams).sort(sortOption);
+    const contactsCount = await Contact.find(filterParams).countDocuments();
 
-    const contacts = await contactsQuery
-      .skip(skip)
-      .limit(limit)
-      .sort(sortOption)
-      .exec();
+    const contacts = await contactsQuery.skip(skip).limit(limit).exec();
 
     const paginationData = calculatePaginationData(
       contactsCount,

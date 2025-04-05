@@ -8,14 +8,17 @@ import {
 } from '../services/contacts.js';
 import { parsePaginationParams } from '../utils/paginationHelpers.js';
 import { parseSortParams } from '../utils/sortingHelper.js';
+import { parseFilterParams } from '../utils/filteringHelper.js';
 
 async function getContacts(req, res) {
   const paginationParams = parsePaginationParams(req.query);
   const sortParams = parseSortParams(req.query);
+  const filterParams = parseFilterParams(req.query);
 
   const data = await getContactsService({
     ...paginationParams,
     ...sortParams,
+    filterParams,
   });
 
   if (!data) {
