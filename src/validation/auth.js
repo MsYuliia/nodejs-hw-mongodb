@@ -16,6 +16,9 @@ const messages = {
     min: 'Password must be at least 6 characters long.',
     required: 'Password is required.',
   },
+  token: {
+    required: 'Token is required.',
+  },
 };
 
 export const registerUserSchema = Joi.object({
@@ -39,4 +42,19 @@ export const registerUserSchema = Joi.object({
 export const loginUserSchema = Joi.object({
   email: Joi.string().email().required(),
   password: Joi.string().min(6).required(),
+});
+
+export const sendResetEmailSchema = Joi.object({
+  email: Joi.string().email().required(),
+});
+
+export const resetPasswordSchema = Joi.object({
+  token: Joi.string().required().messages({
+    'any.required': messages.token.required,
+  }),
+  password: Joi.string().min(6).required().messages({
+    'string.empty': messages.password.empty,
+    'string.min': messages.password.min,
+    'any.required': messages.password.required,
+  }),
 });

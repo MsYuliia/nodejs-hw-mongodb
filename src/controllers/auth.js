@@ -3,6 +3,8 @@ import {
   loginUserService,
   refreshSessionService,
   logoutUserService,
+  sendResetEmailService,
+  resetPasswordService,
 } from '../services/auth.js';
 import createError from 'http-errors';
 import { ONE_DAY } from '../utils/constance.js';
@@ -105,4 +107,28 @@ export async function logoutUser(req, res) {
   });
 
   res.status(204).send();
+}
+
+export async function sendResetEmail(req, res) {
+  const { email } = req.body;
+
+  await sendResetEmailService(email);
+
+  res.status(200).json({
+    status: 200,
+    message: 'Reset password email has been successfully sent.',
+    data: {},
+  });
+}
+
+export async function resetPassword(req, res) {
+  const { token, password } = req.body;
+
+  await resetPasswordService(token, password);
+
+  res.status(200).json({
+    status: 200,
+    message: 'Password has been successfully reset.',
+    data: {},
+  });
 }
