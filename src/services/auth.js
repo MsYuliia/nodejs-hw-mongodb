@@ -1,5 +1,9 @@
+import { randomBytes } from 'crypto';
 import bcrypt from 'bcrypt';
 import User from '../db/models/user.js';
+import createError from 'http-errors';
+import Session from '../db/models/session.js';
+import { ONE_DAY, FIFTEEN_MINUTES } from '../utils/constance.js';
 
 export async function registerUserService({ name, email, password }) {
   const existingEmail = await User.findOne({ email });
@@ -21,4 +25,37 @@ export async function registerUserService({ name, email, password }) {
   const { password: _, ...userWithoutPassword } = savedUser.toObject();
 
   return userWithoutPassword;
+}
+
+export async function loginUserService({ email, password }) {
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    throw createError(404, 'User not found');
+  }
+
+  const isPasswordValid = await bcrypt.compare(password, user.password);
+
+  if (!isPasswordValid) {
+    throw createError(401, 'Unauthorized');
+  }
+
+  // Remove old session if exists
+  await Session.deleteOne({ userId: user._id });
+
+  const accessToken = randomBytes(30).toString('base64');
+  const refreshToken = randomBytes(30).toString('base64');
+
+  const session = await Session.create({
+    userId: user._id,
+    accessToken,
+    refreshToken,
+    accessTokenValidUntil: new Date(Date.now() + FIFTEEN_MINUTES),
+    refreshTokenValidUntil: new Date(Date.now() + ONE_DAY * 30),
+  });
+
+  return {
+    accessToken: session.accessToken,
+    refreshToken: session.refreshToken,
+  };
 }
