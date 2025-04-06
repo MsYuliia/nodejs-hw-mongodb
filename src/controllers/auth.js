@@ -2,6 +2,7 @@ import {
   registerUserService,
   loginUserService,
   refreshSessionService,
+  logoutUserService,
 } from '../services/auth.js';
 import createError from 'http-errors';
 import { ONE_DAY } from '../utils/constance.js';
@@ -25,12 +26,19 @@ export async function registerUser(req, res) {
 export async function loginUser(req, res) {
   const { email, password } = req.body;
 
-  const { accessToken, refreshToken } = await loginUserService({
+  const { accessToken, refreshToken, sessionId } = await loginUserService({
     email,
     password,
   });
 
   res.cookie('refreshToken', refreshToken, {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'strict',
+    maxAge: 30 * ONE_DAY, // 30 days
+  });
+
+  res.cookie('sessionId', sessionId, {
     httpOnly: true,
     secure: true,
     sameSite: 'strict',
@@ -51,11 +59,17 @@ export async function refreshSession(req, res) {
     throw createError(401, 'Refresh token is missing');
   }
 
-  const { accessToken, newRefreshToken } = await refreshSessionService(
-    refreshToken,
-  );
+  const { accessToken, newRefreshToken, sessionId } =
+    await refreshSessionService(refreshToken);
 
   res.cookie('refreshToken', newRefreshToken, {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'strict',
+    maxAge: 30 * ONE_DAY, // 30 days
+  });
+
+  res.cookie('sessionId', sessionId, {
     httpOnly: true,
     secure: true,
     sameSite: 'strict',
@@ -67,4 +81,28 @@ export async function refreshSession(req, res) {
     message: 'Successfully refreshed a session!',
     data: { accessToken },
   });
+}
+
+export async function logoutUser(req, res) {
+  const { sessionId, refreshToken } = req.cookies;
+
+  if (!sessionId || !refreshToken) {
+    throw createError(401, 'Session ID or Refresh Token is missing');
+  }
+
+  await logoutUserService(sessionId, refreshToken);
+
+  res.clearCookie('refreshToken', {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'strict',
+  });
+
+  res.clearCookie('sessionId', {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'strict',
+  });
+
+  res.status(204).send();
 }

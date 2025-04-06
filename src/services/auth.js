@@ -57,6 +57,7 @@ export async function loginUserService({ email, password }) {
   return {
     accessToken: session.accessToken,
     refreshToken: session.refreshToken,
+    sessionId: session._id,
   };
 }
 
@@ -84,5 +85,16 @@ export async function refreshSessionService(refreshToken) {
   return {
     accessToken: newSession.accessToken,
     newRefreshToken: newSession.refreshToken,
+    sessionId: newSession._id,
   };
+}
+
+export async function logoutUserService(sessionId, refreshToken) {
+  const session = await Session.findOne({ _id: sessionId, refreshToken });
+
+  if (!session) {
+    throw createError(404, 'Session not found or invalid');
+  }
+
+  await Session.deleteOne({ _id: session._id });
 }
