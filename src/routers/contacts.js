@@ -2,6 +2,7 @@ import express from 'express';
 import ctrlWrapper from '../utils/ctrlWrapper.js';
 import validateBody from '../middlewares/validateBody.js';
 import isValidId from '../middlewares/isValidId.js';
+import authenticate from '../middlewares/authenticate.js'; // Import the new middleware
 import {
   patchContactSchema,
   postContactSchema,
@@ -15,6 +16,8 @@ import {
 } from '../controllers/contacts.js';
 
 const router = express.Router();
+
+router.use(authenticate);
 
 router.get('/', ctrlWrapper(getContacts));
 router.get('/:id', isValidId, ctrlWrapper(getContactById));
