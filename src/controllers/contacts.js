@@ -19,6 +19,7 @@ async function getContacts(req, res) {
     ...paginationParams,
     ...sortParams,
     filterParams,
+    userId: req.user._id,
   });
 
   if (!data) {
@@ -34,7 +35,7 @@ async function getContacts(req, res) {
 
 async function getContactById(req, res) {
   const { id } = req.params;
-  const contact = await getContactByIdService(id);
+  const contact = await getContactByIdService(id, req.user._id);
 
   if (!contact) {
     throw createError(404, 'Contact not found');
@@ -48,7 +49,10 @@ async function getContactById(req, res) {
 }
 
 const createContact = async (req, res) => {
-  const newContact = await createContactService(req.body);
+  const newContact = await createContactService({
+    ...req.body,
+    userId: req.user._id,
+  });
 
   res.status(201).json({
     status: 201,
@@ -59,7 +63,7 @@ const createContact = async (req, res) => {
 
 const updateContact = async (req, res) => {
   const { id } = req.params;
-  const updatedContact = await updateContactService(id, req.body);
+  const updatedContact = await updateContactService(id, req.body, req.user._id);
 
   if (!updatedContact) {
     throw createError(404, 'Contact not found');
@@ -74,7 +78,7 @@ const updateContact = async (req, res) => {
 
 const deleteContact = async (req, res) => {
   const { id } = req.params;
-  const deletedContact = await deleteContactService(id);
+  const deletedContact = await deleteContactService(id, req.user._id);
 
   if (!deletedContact) {
     throw createError(404, 'Contact not found');

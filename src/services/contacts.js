@@ -7,14 +7,20 @@ export async function getContactsService({
   sortBy,
   sortOrder,
   filterParams,
+  userId,
 }) {
   try {
     const limit = perPage;
     const skip = (page - 1) * perPage;
     const sortOption = { [sortBy]: sortOrder === 'desc' ? -1 : 1 };
 
-    const contactsQuery = Contact.find(filterParams).sort(sortOption);
-    const contactsCount = await Contact.find(filterParams).countDocuments();
+    const contactsQuery = Contact.find({ ...filterParams, userId }).sort(
+      sortOption,
+    );
+    const contactsCount = await Contact.find({
+      ...filterParams,
+      userId,
+    }).countDocuments();
 
     const contacts = await contactsQuery.skip(skip).limit(limit).exec();
 
@@ -34,9 +40,9 @@ export async function getContactsService({
   }
 }
 
-export async function getContactByIdService(contactId) {
+export async function getContactByIdService(contactId, userId) {
   try {
-    const contact = await Contact.findById(contactId);
+    const contact = await Contact.findOne({ _id: contactId, userId });
     return contact;
   } catch (error) {
     console.error(error);
@@ -54,9 +60,9 @@ export async function createContactService(contactData) {
   }
 }
 
-export const updateContactService = async (contactId, updateData) => {
-  const updatedContact = await Contact.findByIdAndUpdate(
-    contactId,
+export const updateContactService = async (contactId, updateData, userId) => {
+  const updatedContact = await Contact.findOneAndUpdate(
+    { _id: contactId, userId },
     { $set: updateData },
     { new: true, runValidators: true },
   );
@@ -64,8 +70,11 @@ export const updateContactService = async (contactId, updateData) => {
   return updatedContact;
 };
 
-export const deleteContactService = async (contactId) => {
-  const deletedContact = await Contact.findByIdAndDelete(contactId);
+export const deleteContactService = async (contactId, userId) => {
+  const deletedContact = await Contact.findOneAndDelete({
+    _id: contactId,
+    userId,
+  });
 
   return deletedContact;
 };
