@@ -59,3 +59,30 @@ export async function loginUserService({ email, password }) {
     refreshToken: session.refreshToken,
   };
 }
+
+export async function refreshSessionService(refreshToken) {
+  const session = await Session.findOne({ refreshToken });
+
+  if (!session || session.refreshTokenValidUntil < new Date()) {
+    throw createError(401, 'Invalid or expired refresh token');
+  }
+
+  // Remove old session
+  await Session.deleteOne({ _id: session._id });
+
+  const accessToken = randomBytes(30).toString('base64');
+  const newRefreshToken = randomBytes(30).toString('base64');
+
+  const newSession = await Session.create({
+    userId: session.userId,
+    accessToken,
+    refreshToken: newRefreshToken,
+    accessTokenValidUntil: new Date(Date.now() + FIFTEEN_MINUTES),
+    refreshTokenValidUntil: new Date(Date.now() + ONE_DAY * 30),
+  });
+
+  return {
+    accessToken: newSession.accessToken,
+    newRefreshToken: newSession.refreshToken,
+  };
+}

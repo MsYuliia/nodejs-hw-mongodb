@@ -1,4 +1,8 @@
-import { registerUserService, loginUserService } from '../services/auth.js';
+import {
+  registerUserService,
+  loginUserService,
+  refreshSessionService,
+} from '../services/auth.js';
 import createError from 'http-errors';
 import { ONE_DAY } from '../utils/constance.js';
 
@@ -36,6 +40,31 @@ export async function loginUser(req, res) {
   res.status(200).json({
     status: 200,
     message: 'Successfully logged in an user!',
+    data: { accessToken },
+  });
+}
+
+export async function refreshSession(req, res) {
+  const { refreshToken } = req.cookies;
+
+  if (!refreshToken) {
+    throw createError(401, 'Refresh token is missing');
+  }
+
+  const { accessToken, newRefreshToken } = await refreshSessionService(
+    refreshToken,
+  );
+
+  res.cookie('refreshToken', newRefreshToken, {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'strict',
+    maxAge: 30 * ONE_DAY, // 30 days
+  });
+
+  res.status(200).json({
+    status: 200,
+    message: 'Successfully refreshed a session!',
     data: { accessToken },
   });
 }
