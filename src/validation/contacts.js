@@ -46,6 +46,7 @@ export const postContactSchema = Joi.object({
       'any.only': messages.contactType.only,
       'any.required': messages.contactType.required,
     }),
+  photo: Joi.string().uri().optional(),
 });
 
 export const patchContactSchema = Joi.object({
@@ -67,4 +68,5 @@ export const patchContactSchema = Joi.object({
     .messages({
       'any.only': messages.contactType.only,
     }),
+  photo: Joi.string().uri().optional(),
 });

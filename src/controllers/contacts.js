@@ -9,6 +9,7 @@ import {
 import { parsePaginationParams } from '../utils/paginationHelpers.js';
 import { parseSortParams } from '../utils/sortingHelper.js';
 import { parseFilterParams } from '../utils/filteringHelper.js';
+import { saveFileToCloudinary } from '../utils/cloudinaryHelper.js';
 
 async function getContacts(req, res) {
   const paginationParams = parsePaginationParams(req.query);
@@ -49,8 +50,15 @@ async function getContactById(req, res) {
 }
 
 const createContact = async (req, res) => {
+  const photo = req.file;
+
+  let photoUrl;
+
+  photoUrl = await saveFileToCloudinary(photo);
+
   const newContact = await createContactService({
     ...req.body,
+    photo: photoUrl,
     userId: req.user._id,
   });
 
@@ -62,8 +70,18 @@ const createContact = async (req, res) => {
 };
 
 const updateContact = async (req, res) => {
+  const photo = req.file;
+
+  let photoUrl;
+
+  photoUrl = await saveFileToCloudinary(photo);
+
   const { id } = req.params;
-  const updatedContact = await updateContactService(id, req.body, req.user._id);
+  const updatedContact = await updateContactService(
+    id,
+    { ...req.body, ...(photoUrl && { photo: photoUrl }) },
+    req.user._id,
+  );
 
   if (!updatedContact) {
     throw createError(404, 'Contact not found');
