@@ -31,7 +31,7 @@ export async function loginUserService({ email, password }) {
   const user = await User.findOne({ email });
 
   if (!user) {
-    throw createError(404, 'User not found');
+    throw createError(401, 'User not found');
   }
 
   const isPasswordValid = await bcrypt.compare(password, user.password);
