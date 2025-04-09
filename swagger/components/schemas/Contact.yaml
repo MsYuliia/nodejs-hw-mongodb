@@ -1,0 +1,32 @@
+type: object
+properties:
+  id:
+    type: string
+    description: Unique identifier for the contact
+  name:
+    type: string
+    description: Name of the contact
+  email:
+    type: string
+    description: Email address of the contact
+  phone:
+    type: string
+    description: Phone number of the contact
+  isFavourite:
+    type: boolean
+    description: Indicates if the contact is marked as a favorite
+  contactType:
+    type: string
+    enum:
+      - work
+      - home
+      - personal
+    description: Type of contact
+  photo:
+    type: string
+    format: uri
+    description: URI of the contact's photo
+required:
+  - id
+  - name
+  - contactType

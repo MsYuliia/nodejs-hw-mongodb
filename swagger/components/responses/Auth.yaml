@@ -1,0 +1,46 @@
+components:
+  responses:
+    AuthSuccessResponse:
+      description: Successful authentication response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+                description: Unique identifier for the user
+              name:
+                type: string
+                description: Name of the user
+              email:
+                type: string
+                description: Email address of the user
+              accessToken:
+                type: string
+                description: Access token for authentication
+              refreshToken:
+                type: string
+                description: Refresh token for session renewal
+            required:
+              - id
+              - email
+              - accessToken
+              - refreshToken
+
+    AuthErrorResponse:
+      description: Error response for authentication
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                description: Error message
+              statusCode:
+                type: integer
+                description: HTTP status code
+            required:
+              - error
+              - statusCode
