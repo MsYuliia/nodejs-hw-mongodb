@@ -12,6 +12,11 @@ export const initCloudinary = () => {
 };
 
 export const saveFileToCloudinary = async (file) => {
+  if (!file) {
+    console.log('No file provided for upload to Cloudinary');
+    return null;
+  }
+
   const response = await cloudinary.v2.uploader.upload(file.path);
   await fs.unlink(file.path);
   return response.secure_url;
