@@ -15,6 +15,18 @@ servers:
   - url: https://nodejs-hw-mongodb-h0yj.onrender.com
   - url: http://localhost:3000
 paths:
+  /auth/login:
+    post:
+      $ref: '../swagger/paths/auth/login.yaml'
+  /auth/register:
+    post:
+      $ref: '../swagger/paths/auth/register.yaml'
+  /auth/logout:
+    post:
+      $ref: '../swagger/paths/auth/logout.yaml'
+  /auth/refresh:
+    post:
+      $ref: '../swagger/paths/auth/refresh.yaml'
   /contacts:
     get:
       $ref: '../swagger/paths/contacts/get.yaml'
@@ -32,5 +44,6 @@ components:
     bearerAuth:
       type: http
       scheme: bearer
-  # responses:
-  #   $ref: '../swagger/components/schemas/Contact.yaml'
+  schemas:
+    Auth:
+      $ref: '../swagger/components/schemas/Auth.yaml'

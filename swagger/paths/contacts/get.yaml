@@ -96,6 +96,10 @@ responses:
                   type: boolean
                   example: false
   '401':
+    description: Unauthorized access or contact not found
     $ref: '../../components/responses/401.yaml'
+  '404':
+    description: Contacts not found
+    $ref: '../../components/responses/404.yaml'
   '500':
     description: Internal server error

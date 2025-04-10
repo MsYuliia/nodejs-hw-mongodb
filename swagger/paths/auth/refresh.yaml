@@ -1,0 +1,34 @@
+tags:
+  - Auth
+summary: Refresh access token
+operationId: refreshToken
+description: Refresh the access token using a valid refresh token.
+security: []
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - refreshToken
+        properties:
+          refreshToken:
+            type: string
+            example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+responses:
+  '200':
+    description: Successfully refreshed token
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            accessToken:
+              type: string
+              example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+  '401':
+    description: Invalid or expired refresh token
+    $ref: '../../components/responses/401.yaml'
+  '500':
+    description: Internal server error
