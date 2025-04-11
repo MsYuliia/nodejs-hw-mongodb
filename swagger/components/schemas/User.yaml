@@ -6,6 +6,10 @@ properties:
   password:
     type: string
     description: Password of the user (hashed)
+  name:
+    type: string
+    description: Name of the user
 required:
   - email
   - password
+  - name

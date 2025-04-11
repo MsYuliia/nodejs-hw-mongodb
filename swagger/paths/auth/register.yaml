@@ -45,5 +45,7 @@ responses:
               example: user@example.com
   '400':
     description: Bad request
+  '409':
+    description: Conflict, email already exists
   '500':
     description: Internal server error

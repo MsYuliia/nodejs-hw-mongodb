@@ -1,6 +1,6 @@
 type: object
 properties:
-  id:
+  _id:
     type: string
     description: Unique identifier for the contact
   name:
@@ -9,7 +9,10 @@ properties:
   email:
     type: string
     description: Email address of the contact
-  phone:
+  userId:
+    type: string
+    description: Unique identifier for the user who owns the contact
+  phoneNumber:
     type: string
     description: Phone number of the contact
   isFavourite:
@@ -27,6 +30,7 @@ properties:
     format: uri
     description: URI of the contact's photo
 required:
-  - id
+  - _id
   - name
   - contactType
+  - phoneNumber

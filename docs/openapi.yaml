@@ -45,5 +45,5 @@ components:
       type: http
       scheme: bearer
   schemas:
-    Auth:
-      $ref: '../swagger/components/schemas/Auth.yaml'
+    User:
+      $ref: '../swagger/components/schemas/User.yaml'

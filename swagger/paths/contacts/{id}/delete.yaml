@@ -13,7 +13,7 @@ parameters:
     schema:
       type: string
 responses:
-  '200':
+  '204':
     description: Contact deleted successfully
   '401':
     description: Unauthorized access or contact not found

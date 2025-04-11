@@ -21,7 +21,7 @@ parameters:
       type: integer
       minimum: 1
       example: 1
-  - name: limit
+  - name: perPage
     in: query
     required: false
     description: Number of contacts per page
@@ -98,8 +98,5 @@ responses:
   '401':
     description: Unauthorized access or contact not found
     $ref: '../../components/responses/401.yaml'
-  '404':
-    description: Contacts not found
-    $ref: '../../components/responses/404.yaml'
   '500':
     description: Internal server error
