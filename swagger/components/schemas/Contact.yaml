@@ -34,3 +34,4 @@ required:
   - name
   - contactType
   - phoneNumber
+  - userId

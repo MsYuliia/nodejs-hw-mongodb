@@ -749,6 +749,10 @@
       "User": {
         "type": "object",
         "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Unique identifier for the user"
+          },
           "email": {
             "type": "string",
             "description": "Email address of the user"
@@ -765,7 +769,8 @@
         "required": [
           "email",
           "password",
-          "name"
+          "name",
+          "_id"
         ]
       },
       "contact": {
@@ -814,7 +819,8 @@
           "_id",
           "name",
           "contactType",
-          "phoneNumber"
+          "phoneNumber",
+          "userId"
         ]
       }
     },
